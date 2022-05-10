@@ -52,7 +52,7 @@ License
 ----
 Laravel validation rules builder is released under the MIT License.
 
-Created by [Salar Bahador][link-github].
+Created by [Salar Bahador][link-github]. [Linkedin][link-linkedin]
 
 Built with ❤ for you.
 
@@ -72,5 +72,6 @@ Contributions, useful comments, and feedback are most welcome!
 [link-packagist]: https://packagist.org/packages/salibhdr/laravel-validation-rules-builder
 [link-downloads]: https://packagist.org/packages/salibhdr/laravel-validation-rules-builder/stats
 [link-packegist]: https://packagist.org/packages/salibhdr/laravel-validation-rules-builder
-[link-issues]: https://github.com/salibhdr/laravel-validation-rules-builder/issues
-[link-github]: https://github.com/salibhdr/laravel-validation-rules-builder/issues
+[link-issues]: https://github.com/Salibhdr/laravel-validation-rules-builder/issues
+[link-github]: https://github.com/Salibhdr
+[link-linkedin]: https://www.linkedin.com/in/salar-bahador
