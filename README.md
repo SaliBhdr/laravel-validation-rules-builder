@@ -40,6 +40,7 @@ For Laravel < 5.5 Register the Service provider in your config/app.php configura
 
 ### Commands
 
+
 #### Code
 
 **Examples:**
