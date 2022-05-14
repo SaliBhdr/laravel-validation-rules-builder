@@ -30,11 +30,6 @@ class RulesManager implements RulesManagerContract
     use ForwardsCalls;
 
     /**
-     * @var string
-     */
-    protected $method = Methods::ANY;
-
-    /**
      * @var RulesBagContract
      */
     protected $rulesBag;
@@ -78,15 +73,11 @@ class RulesManager implements RulesManagerContract
         Config $config,
         CachePrefixFactory $cachePrefixFactory
     ) {
-        $this->rulesBag = $rulesBag;
-        $this->request  = $request;
-        $this->cache    = $cache;
-        $this->config   = $config;
+        $this->request            = $request;
+        $this->rulesBag           = $rulesBag;
+        $this->cache              = $cache;
+        $this->config             = $config;
         $this->cachePrefixFactory = $cachePrefixFactory;
-
-        if ($this->rulesBag->isRuleAllowed($request->method())) {
-            $this->method = strtoupper($request->method());
-        }
     }
 
     /**
@@ -115,7 +106,7 @@ class RulesManager implements RulesManagerContract
      */
     public function rules(string $method = null, bool $override = null): array
     {
-        $method = empty($method) ? $this->method : strtoupper($method);
+        $method = strtoupper(empty($method) ? $this->request->method() : $method);
 
         $override = is_null($override) ? $this->rulesBag->isOverride($method) : $override;
 
@@ -150,10 +141,6 @@ class RulesManager implements RulesManagerContract
             return $anyRules;
         }
 
-        if (!$this->rulesBag->isRuleAllowed($method)) {
-            return $override ? [] : $anyRules;
-        }
-
         $methodRules = $this->rulesBag->getRule($method);
 
         return $this->mergeRules(
@@ -166,6 +153,10 @@ class RulesManager implements RulesManagerContract
 
     protected function mergeRules(array $keys, array $firstRules, array $secondRules, bool $override): array
     {
+        if ($override && empty($secondRules)) {
+            return [];
+        }
+
         $result = [];
 
         foreach ($keys as $key) {
@@ -266,8 +257,8 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param string $method
-     * @param array $parameters
+     * @param  string  $method
+     * @param  array  $parameters
      *
      * @return mixed
      */

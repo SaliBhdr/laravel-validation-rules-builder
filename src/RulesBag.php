@@ -7,21 +7,9 @@ use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 class RulesBag implements RulesBagContract
 {
     /**
-     * @var array[]
+     * @var array
      */
-    protected $rules = [
-        Methods::ANY     => [],
-        Methods::GET     => [],
-        Methods::HEAD    => [],
-        Methods::POST    => [],
-        Methods::PUT     => [],
-        Methods::DELETE  => [],
-        Methods::CONNECT => [],
-        Methods::OPTIONS => [],
-        Methods::PATCH   => [],
-        Methods::PURGE   => [],
-        Methods::TRACE   => [],
-    ];
+    protected $rules = [];
 
     /**
      * @var array
@@ -29,7 +17,9 @@ class RulesBag implements RulesBagContract
     protected $overrides = [];
 
     /**
-     * @return array[]
+     * @param  string  $name
+     *
+     * @return array
      */
     public function getRule(string $name): array
     {
@@ -276,10 +266,6 @@ class RulesBag implements RulesBagContract
     {
         $method = strtoupper($method);
 
-        if (!$this->isRuleAllowed($method)) {
-            return;
-        }
-
         $this->rules[$method] = $rules;
     }
 
@@ -292,15 +278,5 @@ class RulesBag implements RulesBagContract
     protected function mergeRules(array $firstRules, array $secondRules): array
     {
         return array_merge_recursive($firstRules, $secondRules);
-    }
-
-    /**
-     * @param  string  $name
-     *
-     * @return bool
-     */
-    public function isRuleAllowed(string $name): bool
-    {
-        return array_key_exists($name, $this->rules);
     }
 }

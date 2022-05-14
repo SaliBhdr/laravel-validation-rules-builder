@@ -5,12 +5,13 @@ namespace SaliBhdr\ValidationRules\Contracts;
 interface RulesBagContract
 {
     /**
-     * @return array[]
+     * @param  string  $name
+     * @return array
      */
     public function getRule(string $name): array;
 
     /**
-     * @return array[]
+     * @return array
      */
     public function getRules(): array;
 
@@ -128,10 +129,4 @@ interface RulesBagContract
      * @return $this
      */
     public function trace(array $rules, array $binds = [], bool $override = false): RulesBagContract;
-
-    /**
-     * @param  string  $name
-     * @return bool
-     */
-    public function isRuleAllowed(string $name): bool;
 }
