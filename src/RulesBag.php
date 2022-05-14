@@ -56,6 +56,7 @@ class RulesBag implements RulesBagContract
 
     /**
      * @param  string  $name
+     *
      * @return bool
      */
     public function isOverride(string $name): bool
@@ -67,6 +68,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function create(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -78,6 +80,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function update(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -91,6 +94,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function any(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -102,6 +106,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function get(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -115,6 +120,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function head(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -126,6 +132,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function post(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -137,6 +144,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function put(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -148,6 +156,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function delete(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -159,6 +168,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function connect(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -170,6 +180,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function options(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -181,6 +192,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function patch(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -192,6 +204,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function purge(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -203,6 +216,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     public function trace(array $rules, array $binds = [], bool $override = false): RulesBagContract
@@ -215,6 +229,7 @@ class RulesBag implements RulesBagContract
      * @param  array  $rules
      * @param  array  $binds
      * @param  bool  $override
+     *
      * @return $this
      */
     protected function add(string $method, array $rules, array $binds = [], bool $override = false): self
@@ -228,6 +243,9 @@ class RulesBag implements RulesBagContract
         $binds = array_unique($binds);
 
         foreach ($binds as $bind) {
+            if ($override) {
+                $this->overrides[] = strtoupper($bind);
+            }
             $this->mergeTargetMethodRules($bind, $rules);
         }
 
@@ -240,7 +258,7 @@ class RulesBag implements RulesBagContract
      *
      * @return void
      */
-    protected function mergeTargetMethodRules(string $method, array $rules): void
+    protected function mergeTargetMethodRules(string $method, array $rules)
     {
         $this->setTargetMethodRules(
             $method,
@@ -254,7 +272,7 @@ class RulesBag implements RulesBagContract
      *
      * @return void
      */
-    protected function setTargetMethodRules(string $method, array $rules): void
+    protected function setTargetMethodRules(string $method, array $rules)
     {
         $method = strtoupper($method);
 
@@ -268,6 +286,7 @@ class RulesBag implements RulesBagContract
     /**
      * @param  array  $firstRules
      * @param  array  $secondRules
+     *
      * @return array
      */
     protected function mergeRules(array $firstRules, array $secondRules): array
@@ -277,6 +296,7 @@ class RulesBag implements RulesBagContract
 
     /**
      * @param  string  $name
+     *
      * @return bool
      */
     public function isRuleAllowed(string $name): bool

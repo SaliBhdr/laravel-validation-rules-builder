@@ -171,7 +171,7 @@ class RuleListCommand extends Command
      *
      * @return void
      */
-    protected function displayRules(array $rules): void
+    protected function displayRules(array $rules)
     {
         $rules = collect($rules);
 
@@ -301,7 +301,7 @@ class RuleListCommand extends Command
     {
         return [
             ['json', null, InputOption::VALUE_NONE, 'Output the rule list as JSON'],
-            ['type', null, InputOption::VALUE_OPTIONAL, 'Filter the rules by type ( form, name, uri, custom)'],
+            ['type', null, InputOption::VALUE_OPTIONAL, 'Filter the rules by type ( class, form, name, uri, custom)'],
             ['method', null, InputOption::VALUE_OPTIONAL, 'Filter the rules by method'],
             ['key', null, InputOption::VALUE_OPTIONAL, 'Filter the rules by key'],
             ['prop', null, InputOption::VALUE_OPTIONAL, 'Filter the rules by given property'],

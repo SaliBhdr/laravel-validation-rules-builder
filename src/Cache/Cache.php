@@ -1,6 +1,6 @@
 <?php
 
-namespace SaliBhdr\ValidationRules;
+namespace SaliBhdr\ValidationRules\Cache;
 
 use Illuminate\Filesystem\Filesystem;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
@@ -37,7 +37,7 @@ class Cache implements CacheContract
     /**
      * @var Filesystem
      */
-    protected Filesystem $files;
+    protected $files;
 
 
     private function __construct(Filesystem $files, Config $config)
@@ -63,6 +63,7 @@ class Cache implements CacheContract
     /**
      * @param  string  $method
      * @param $value
+     *
      * @return bool
      */
     public function put(string $method, $value): bool
@@ -80,6 +81,7 @@ class Cache implements CacheContract
 
     /**
      * @param  string  $method
+     *
      * @return mixed|null
      */
     public function get(string $method): ?array
@@ -88,17 +90,26 @@ class Cache implements CacheContract
             return null;
         }
 
-        $key = $this->getCacheKey($method);
-
-        if (isset($this->rules[$key])) {
-            return $this->rules[$key];
+        if ($this->has($method)) {
+            return $this->rules[$this->getCacheKey($method)];
         }
 
         return null;
     }
 
     /**
+     * @param  string  $method
+     *
+     * @return mixed|null
+     */
+    public function has(string $method): bool
+    {
+        return array_key_exists($this->getCacheKey($method), $this->rules);
+    }
+
+    /**
      * @param  CachePrefixContract  $prefix
+     *
      * @return CacheContract
      */
     public function prefix(CachePrefixContract $prefix): CacheContract
@@ -110,6 +121,7 @@ class Cache implements CacheContract
 
     /**
      * @param  bool  $isEnabled
+     *
      * @return CacheContract
      */
     public function enable(bool $isEnabled): CacheContract
@@ -121,6 +133,7 @@ class Cache implements CacheContract
 
     /**
      * @param  string  $path
+     *
      * @return CacheContract
      */
     public function setPath(string $path): CacheContract
@@ -141,13 +154,14 @@ class Cache implements CacheContract
     /**
      * @return bool
      */
-    protected function isEnabled(): bool
+    public function isEnabled(): bool
     {
         return $this->isEnabled;
     }
 
     /**
      * @param  string  $method
+     *
      * @return string
      */
     protected function getCacheKey(string $method): string
@@ -166,7 +180,7 @@ class Cache implements CacheContract
     /**
      * @return void
      */
-    public function flush(): void
+    public function flush()
     {
         $this->files->delete($this->getPath());
     }

@@ -3,8 +3,10 @@
 namespace SaliBhdr\ValidationRules;
 
 use Illuminate\Filesystem\Filesystem;
+use SaliBhdr\ValidationRules\Cache\Cache;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Config\Repository as Config;
+use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Commands\RuleListCommand;
 use SaliBhdr\ValidationRules\Commands\RuleClearCommand;
@@ -19,7 +21,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function register(): void
+    public function register()
     {
         $this->setupConfig();
 
@@ -36,7 +38,8 @@ class ServiceProvider extends BaseServiceProvider
                 $app->make('request'),
                 $app->make(RulesBagContract::class),
                 $app->make(CacheContract::class),
-                $app->make(Config::class)
+                $app->make(Config::class),
+                new CachePrefixFactory()
             );
         });
 
@@ -70,7 +73,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    protected function setupCommands(): void
+    protected function setupCommands()
     {
         $this->commands([
             RuleClearCommand::class,

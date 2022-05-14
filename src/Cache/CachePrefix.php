@@ -1,10 +1,10 @@
 <?php
 
-namespace SaliBhdr\ValidationRules;
+namespace SaliBhdr\ValidationRules\Cache;
 
 use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
 
-class CachePrefixPayload implements CachePrefixContract
+class CachePrefix implements CachePrefixContract
 {
     /**
      * @var string

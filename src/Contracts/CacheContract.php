@@ -48,5 +48,5 @@ interface CacheContract
     /**
      * @return void
      */
-    public function flush(): void;
+    public function flush();
 }

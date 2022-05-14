@@ -7,6 +7,7 @@ use Mockery\MockInterface;
 use Illuminate\Http\Request;
 use Mockery\LegacyMockInterface;
 use Illuminate\Foundation\Http\FormRequest;
+use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Methods;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
@@ -37,7 +38,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
         $this->requestMock = Mockery::mock(Request::class);
@@ -49,7 +50,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanBeInstantiated(): void
+    public function testRuleManagerCanBeInstantiated()
     {
         $this->rulesManagerInstance(Methods::POST);
     }
@@ -57,7 +58,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerShouldBuildRulesOfCreateOnPostRequest(): void
+    public function testRuleManagerShouldBuildRulesOfCreateOnPostRequest()
     {
         $method = Methods::POST;
 
@@ -104,7 +105,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerShouldBuildRulesOfUpdateOnPatchRequest(): void
+    public function testRuleManagerShouldBuildRulesOfUpdateOnPatchRequest()
     {
         $method = Methods::PATCH;
 
@@ -150,7 +151,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerBuildRulesOfUpdateOnPutRequest(): void
+    public function testRuleManagerBuildRulesOfUpdateOnPutRequest()
     {
         $method = Methods::PUT;
 
@@ -196,7 +197,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerAddsMethodValidationIfTheValidationIsNotExistsInAnyMethod(): void
+    public function testRuleManagerAddsMethodValidationIfTheValidationIsNotExistsInAnyMethod()
     {
         $method = Methods::POST;
 
@@ -227,7 +228,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanOverrideAnyRules(): void
+    public function testRuleManagerCanOverrideAnyRules()
     {
         $method = Methods::POST;
 
@@ -256,7 +257,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerOnlyReturnsOnlyAnyRulesIfTheMethodIsNotAllowed(): void
+    public function testRuleManagerOnlyReturnsOnlyAnyRulesIfTheMethodIsNotAllowed()
     {
         $rules = $this->rulesManagerInstance('not-allowed-method')
                       ->any([
@@ -277,7 +278,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerOnlyReturnsOnlyAnyRulesIfTheMethodIsAny(): void
+    public function testRuleManagerOnlyReturnsOnlyAnyRulesIfTheMethodIsAny()
     {
         $rules = $this->rulesManagerInstance(Methods::ANY)
                       ->any([
@@ -298,7 +299,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanReturnOtherRulesThanRequestMethod(): void
+    public function testRuleManagerCanReturnOtherRulesThanRequestMethod()
     {
         $rules = $this->rulesManagerInstance(Methods::DELETE)
                       ->any([
@@ -323,7 +324,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanReturnOtherRulesThanRequestMethodAndOverrideRuleManager(): void
+    public function testRuleManagerCanReturnOtherRulesThanRequestMethodAndOverrideRuleManager()
     {
         $rules = $this->rulesManagerInstance(Methods::POST)
                       ->any([
@@ -346,7 +347,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanBindOtherHttpMethodsToRule(): void
+    public function testRuleManagerCanBindOtherHttpMethodsToRule()
     {
         $builder = $this->rulesManagerInstance(Methods::POST)
                         ->any([
@@ -376,7 +377,7 @@ class RulesManagerTest extends TestCase
     /**
      * @return void
      */
-    public function testRuleManagerCanMergeBoundRulesWithMethodRules(): void
+    public function testRuleManagerCanMergeBoundRulesWithMethodRules()
     {
         $rules = $this->rulesManagerInstance(Methods::DELETE)
                       ->any([
@@ -401,7 +402,7 @@ class RulesManagerTest extends TestCase
         ], $rules);
     }
 
-    public function testBindWillReturnAnyRulesIfBindIsNotAValidMethod(): void
+    public function testBindWillReturnAnyRulesIfBindIsNotAValidMethod()
     {
         $bind = 'not-valid-bind';
 
@@ -453,20 +454,20 @@ class RulesManagerTest extends TestCase
         return new RulesManager($this->requestMock, $this->rulesBagMock, $this->cacheMock);
     }
 
-    protected function mockRequestMethod(string $method): void
+    protected function mockRequestMethod(string $method)
     {
         $this->requestMock->shouldReceive('method')
                           ->andReturn($method);
     }
 
-    protected function mockRuleAllowed(string $method, bool $isAllowed): void
+    protected function mockRuleAllowed(string $method, bool $isAllowed)
     {
         $this->rulesBagMock->shouldReceive('isRuleAllowed')
                            ->with($method)
                            ->andReturn($isAllowed);
     }
 
-    protected function healthyAssert(string $method, array $anyRules, array $methodRules): void
+    protected function healthyAssert(string $method, array $anyRules, array $methodRules)
     {
         $this->rulesBagMock->shouldReceive('any')->once()->andReturnSelf();
         $this->rulesBagMock->shouldReceive('isOverride')->with($method)->once()->andReturnFalse();
@@ -476,7 +477,7 @@ class RulesManagerTest extends TestCase
         $this->cacheMock->shouldReceive('put')->once()->andReturnTrue();
     }
 
-    protected function healthyAssertWithOverride(string $method, array $anyRules, array $methodRules): void
+    protected function healthyAssertWithOverride(string $method, array $anyRules, array $methodRules)
     {
         $this->rulesBagMock->shouldReceive('any')->once()->andReturnSelf();
         $this->rulesBagMock->shouldReceive('isOverride')->with($method)->once()->andReturnTrue();

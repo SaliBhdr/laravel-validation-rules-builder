@@ -3,8 +3,8 @@
 namespace SaliBhdr\ValidationRules;
 
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Traits\ForwardsCalls;
+use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use Illuminate\Contracts\Config\Repository as Config;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
@@ -60,17 +60,29 @@ class RulesManager implements RulesManagerContract
     protected $config;
 
     /**
+     * @var CachePrefixFactory
+     */
+    private $cachePrefixFactory;
+
+    /**
      * @param  Request  $request
      * @param  RulesBagContract  $rulesBag
      * @param  CacheContract  $cache
      * @param  Config  $config
+     * @param  CachePrefixFactory  $cachePrefixFactory
      */
-    public function __construct(Request $request, RulesBagContract $rulesBag, CacheContract $cache, Config $config)
-    {
+    public function __construct(
+        Request $request,
+        RulesBagContract $rulesBag,
+        CacheContract $cache,
+        Config $config,
+        CachePrefixFactory $cachePrefixFactory
+    ) {
         $this->rulesBag = $rulesBag;
         $this->request  = $request;
         $this->cache    = $cache;
         $this->config   = $config;
+        $this->cachePrefixFactory = $cachePrefixFactory;
 
         if ($this->rulesBag->isRuleAllowed($request->method())) {
             $this->method = strtoupper($request->method());
@@ -235,40 +247,13 @@ class RulesManager implements RulesManagerContract
     {
         if ($this->config->get('rules.cache.enable', true) || $force) {
             $this->cache->enable(true)
-                        ->prefix($this->createCachePrefix($key));
+                        ->prefix($this->cachePrefixFactory->createPrefix(empty($key) ? $this->request : $key));
         } else {
             $this->cache->enable(false);
         }
 
         return $this;
     }
-
-    /**
-     * @param  string|null  $key
-     *
-     * @return ?CachePrefixPayload
-     */
-    protected function createCachePrefix(?string $key): ?CachePrefixPayload
-    {
-        if (!empty($key)) {
-            return new CachePrefixPayload('custom', $key);
-        }
-
-        if ($this->request instanceof FormRequest) {
-            $payload = new CachePrefixPayload('form', get_class($this->request));
-        } else {
-            $route = $this->request->route();
-
-            if (!empty($route->getName())) {
-                $payload = new CachePrefixPayload('name', $route->getName());
-            } else {
-                $payload = new CachePrefixPayload('uri', $route->uri());
-            }
-        }
-
-        return $payload;
-    }
-
 
     /**
      * shows that if the retrieved rules are the cached rules or just newly resolved
