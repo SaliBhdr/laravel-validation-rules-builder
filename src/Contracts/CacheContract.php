@@ -13,9 +13,15 @@ interface CacheContract
 
     /**
      * @param  string  $method
-     * @return mixed|null
+     * @return array|null
      */
     public function get(string $method): ?array;
+
+    /**
+     * @param  string  $method
+     * @return bool
+     */
+    public function has(string $method): bool;
 
     /**
      * @param  CachePrefixContract  $prefix
