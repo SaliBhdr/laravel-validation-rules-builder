@@ -179,19 +179,18 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  array  ...$arrays
+     * @param  array  $rules
+     * @param  string  $key
      *
      * @return array
      */
-    protected function getArrayKeys(array ...$arrays): array
+    protected function getRelatedRulesOfKey(array $rules, string $key): array
     {
-        $keys = [];
-
-        foreach ($arrays as $arr) {
-            $keys = array_merge($keys, array_keys($arr));
+        if (!array_key_exists($key, $rules)) {
+            return [];
         }
 
-        return array_unique($keys);
+        return $this->keyRulesToArray($rules[$key]);
     }
 
     /**
@@ -209,23 +208,19 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  string  $key
+     * @param  array  ...$arrays
      *
      * @return array
      */
-    protected function getRelatedRulesOfKey(array $rules, string $key): array
+    protected function getArrayKeys(array ...$arrays): array
     {
-        if (!array_key_exists($key, $rules)) {
-            return [];
+        $keys = [];
+
+        foreach ($arrays as $arr) {
+            $keys = array_merge($keys, array_keys($arr));
         }
 
-        return $this->keyRulesToArray($rules[$key]);
-    }
-
-    public function __call($method, $parameters)
-    {
-        return $this->forwardDecoratedCallTo($this->rulesBag, $method, $parameters);
+        return array_unique($keys);
     }
 
     /**
@@ -238,9 +233,9 @@ class RulesManager implements RulesManagerContract
      */
     public function cache(string $key = null, bool $force = false): RulesManagerContract
     {
-        if (!$this->config->get('rules.cache.disabled', false) || $force) {
+        if ($this->config->get('rules.cache.enable', true) || $force) {
             $this->cache->enable(true)
-                        ->prefix((string)$this->createCachePrefix($key));
+                        ->prefix($this->createCachePrefix($key));
         } else {
             $this->cache->enable(false);
         }
@@ -283,5 +278,16 @@ class RulesManager implements RulesManagerContract
     public function isCached(): bool
     {
         return $this->isCached;
+    }
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $parameters)
+    {
+        return $this->forwardDecoratedCallTo($this->rulesBag, $method, $parameters);
     }
 }

@@ -6,8 +6,11 @@ use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 
 class RulesBag implements RulesBagContract
 {
+    /**
+     * @var array[]
+     */
     protected $rules = [
-        Methods::ANY  => [],
+        Methods::ANY     => [],
         Methods::GET     => [],
         Methods::HEAD    => [],
         Methods::POST    => [],
@@ -231,6 +234,12 @@ class RulesBag implements RulesBagContract
         return $this;
     }
 
+    /**
+     * @param  string  $method
+     * @param  array  $rules
+     *
+     * @return void
+     */
     protected function mergeTargetMethodRules(string $method, array $rules): void
     {
         $this->setTargetMethodRules(
@@ -239,6 +248,12 @@ class RulesBag implements RulesBagContract
         );
     }
 
+    /**
+     * @param  string  $method
+     * @param  array  $rules
+     *
+     * @return void
+     */
     protected function setTargetMethodRules(string $method, array $rules): void
     {
         $method = strtoupper($method);

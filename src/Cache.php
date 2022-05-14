@@ -5,6 +5,7 @@ namespace SaliBhdr\ValidationRules;
 use Illuminate\Filesystem\Filesystem;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use Illuminate\Contracts\Config\Repository as Config;
+use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
 
 class Cache implements CacheContract
 {
@@ -39,7 +40,7 @@ class Cache implements CacheContract
     protected Filesystem $files;
 
 
-    public function __construct(Filesystem $files, Config $config)
+    private function __construct(Filesystem $files, Config $config)
     {
         $this->files = $files;
 
@@ -97,12 +98,12 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  string  $prefix
+     * @param  CachePrefixContract  $prefix
      * @return CacheContract
      */
-    public function prefix(string $prefix): CacheContract
+    public function prefix(CachePrefixContract $prefix): CacheContract
     {
-        $this->prefix = $prefix;
+        $this->prefix = $prefix->getType() . ':' . $prefix->getKey();
 
         return $this;
     }

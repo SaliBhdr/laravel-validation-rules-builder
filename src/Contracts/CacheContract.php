@@ -18,10 +18,10 @@ interface CacheContract
     public function get(string $method): ?array;
 
     /**
-     * @param  string  $prefix
+     * @param  CachePrefixContract  $prefix
      * @return CacheContract
      */
-    public function prefix(string $prefix): CacheContract;
+    public function prefix(CachePrefixContract $prefix): CacheContract;
 
     /**
      * @param  bool  $isEnabled

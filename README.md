@@ -55,6 +55,7 @@ License
 Laravel validation rules builder is released under the MIT License.
 
 Created by [Salar Bahador][link-github]
+
 Linked In Address : [Linkedin][link-linkedin]
 
 Built with ❤ for you.

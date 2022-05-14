@@ -2,7 +2,9 @@
 
 namespace SaliBhdr\ValidationRules;
 
-class CachePrefixPayload
+use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
+
+class CachePrefixPayload implements CachePrefixContract
 {
     /**
      * @var string
@@ -20,8 +22,19 @@ class CachePrefixPayload
         $this->key  = $key;
     }
 
-    public function __toString(): string
+    /**
+     * @return string
+     */
+    public function getType(): string
     {
-        return $this->type.':'.$this->key;
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
     }
 }
