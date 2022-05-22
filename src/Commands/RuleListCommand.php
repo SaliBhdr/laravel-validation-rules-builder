@@ -7,8 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use LucidFrame\Console\ConsoleTable;
-use Symfony\Component\Console\Input\InputOption;
 use SaliBhdr\ValidationRules\Methods;
+use Symfony\Component\Console\Input\InputOption;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 
 class RuleListCommand extends Command
@@ -80,7 +80,7 @@ class RuleListCommand extends Command
 
         $this->cache = $cache;
 
-        $this->rules = collect($this->cache->getAll());
+        $this->rules = collect($this->cache->all());
     }
 
     /**
@@ -313,7 +313,7 @@ class RuleListCommand extends Command
     protected function getMethodOption(): ?string
     {
         if ($method = $this->option('method')) {
-            return strtoupper($method);
+            return $method;
         }
 
         return null;

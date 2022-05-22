@@ -6,23 +6,25 @@ use Illuminate\Support\Facades\Facade;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
 
 /**
- * @method static self build(\Illuminate\Http\Request $request = null) returns the instance of rules manager
- * @method self any(array $rules, array $binds = [], bool $override = false)
- * @method self get(array $rules, array $binds = [], bool $override = false)
- * @method self head(array $rules, array $binds = [], bool $override = false)
- * @method self post(array $rules, array $binds = [], bool $override = false)
- * @method self put(array $rules, array $binds = [], bool $override = false)
- * @method self delete(array $rules, array $binds = [], bool $override = false)
- * @method self connect(array $rules, array $binds = [], bool $override = false)
- * @method self options(array $rules, array $binds = [], bool $override = false)
- * @method self patch(array $rules, array $binds = [], bool $override = false)
- * @method self purge(array $rules, array $binds = [], bool $override = false)
- * @method self trace(array $rules, array $binds = [], bool $override = false)
- * @method self create(array $rules, array $binds = [], bool $override = false)
- * @method self update(array $rules, array $binds = [], bool $override = false)
+ * @method static self build() returns the instance of rules manager
+ * @method self any(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self get(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self head(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self post(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self put(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self delete(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self connect(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self options(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self patch(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self purge(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self trace(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self create(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self update(array $rules, bool $cacheable = true, array $binds = [])
  * @method self cache(string $key = null, bool $force = false) enables caching on rules
+ * @method \SaliBhdr\ValidationRules\Contracts\CacheContract getCache() returns cache instance
+ * @method \SaliBhdr\ValidationRules\Contracts\CacheConfigContract getCacheConfig() returns cache instance
  * @method bool isCached() shows that if the retrieved rules are the cached rules or just newly resolved
- * @method array rules(string $method = null, bool $override = null) returns the resolved rules
+ * @method array rules(string $method = null,bool $override = false) returns the resolved rules
  */
 class RulesBuilder extends Facade
 {

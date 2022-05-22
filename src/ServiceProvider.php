@@ -2,15 +2,16 @@
 
 namespace SaliBhdr\ValidationRules;
 
-use Illuminate\Filesystem\Filesystem;
 use SaliBhdr\ValidationRules\Cache\Cache;
 use Illuminate\Contracts\Foundation\Application;
+use SaliBhdr\ValidationRules\Cache\CacheConfig;
 use Illuminate\Contracts\Config\Repository as Config;
-use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Commands\RuleListCommand;
+use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Commands\RuleClearCommand;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
+use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -25,8 +26,16 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->setupConfig();
 
-        $this->app->singleton(CacheContract::class, function (Application $app) {
-            return Cache::init($app->make(Filesystem::class), $app->make(Config::class));
+        $this->app->bind(CacheConfigContract::class, function (Application $app) {
+            return new CacheConfig(
+                $app->make('request'),
+                $app->make(Config::class),
+                new CachePrefixFactory()
+            );
+        });
+
+        $this->app->bind(CacheContract::class, function (Application $app) {
+            return new Cache($app->make(CacheConfigContract::class));
         });
 
         $this->app->bind(RulesBagContract::class, function () {
@@ -37,9 +46,8 @@ class ServiceProvider extends BaseServiceProvider
             return new RulesManager(
                 $app->make('request'),
                 $app->make(RulesBagContract::class),
-                $app->make(CacheContract::class),
-                $app->make(Config::class),
-                new CachePrefixFactory()
+                $app->make(RulesBagContract::class),
+                $app->make(CacheContract::class)
             );
         });
 

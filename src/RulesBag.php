@@ -12,19 +12,12 @@ class RulesBag implements RulesBagContract
     protected $rules = [];
 
     /**
-     * @var array
-     */
-    protected $overrides = [];
-
-    /**
      * @param  string  $name
      *
      * @return array
      */
     public function getRule(string $name): array
     {
-        $name = strtoupper($name);
-
         return $this->rules[$name] ?? [];
     }
 
@@ -37,205 +30,166 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @return array
-     */
-    public function getOverrides(): array
-    {
-        return $this->overrides;
-    }
-
-    /**
-     * @param  string  $name
+     * @param  array  $rules
+     * @param  array  $binds
      *
-     * @return bool
+     * @return $this
      */
-    public function isOverride(string $name): bool
+    public function create(array $rules, array $binds = []): RulesBagContract
     {
-        return in_array($name, $this->overrides);
+        return $this->add(Methods::POST, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function create(array $rules, array $binds = [], bool $override = false): RulesBagContract
-    {
-        return $this->add(Methods::POST, $rules, $binds, $override);
-    }
-
-    /**
-     * @param  array  $rules
-     * @param  array  $binds
-     * @param  bool  $override
-     *
-     * @return $this
-     */
-    public function update(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function update(array $rules, array $binds = []): RulesBagContract
     {
         $binds[] = Methods::PATCH;
 
-        return $this->add(Methods::PUT, $rules, $binds, $override);
+        return $this->add(Methods::PUT, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function any(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function any(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::ANY, $rules, $binds, $override);
+        return $this->add(Methods::ANY, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function get(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function get(array $rules, array $binds = []): RulesBagContract
     {
         $binds[] = Methods::HEAD;
 
-        return $this->add(Methods::GET, $rules, $binds, $override);
+        return $this->add(Methods::GET, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function head(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function head(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::HEAD, $rules, $binds, $override);
+        return $this->add(Methods::HEAD, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function post(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function post(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::POST, $rules, $binds, $override);
+        return $this->add(Methods::POST, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function put(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function put(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::PUT, $rules, $binds, $override);
+        return $this->add(Methods::PUT, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function delete(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function delete(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::DELETE, $rules, $binds, $override);
+        return $this->add(Methods::DELETE, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function connect(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function connect(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::CONNECT, $rules, $binds, $override);
+        return $this->add(Methods::CONNECT, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function options(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function options(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::OPTIONS, $rules, $binds, $override);
+        return $this->add(Methods::OPTIONS, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function patch(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function patch(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::PATCH, $rules, $binds, $override);
+        return $this->add(Methods::PATCH, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function purge(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function purge(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::PURGE, $rules, $binds, $override);
+        return $this->add(Methods::PURGE, $rules, $binds);
     }
 
     /**
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    public function trace(array $rules, array $binds = [], bool $override = false): RulesBagContract
+    public function trace(array $rules, array $binds = []): RulesBagContract
     {
-        return $this->add(Methods::TRACE, $rules, $binds, $override);
+        return $this->add(Methods::TRACE, $rules, $binds);
     }
 
     /**
      * @param  string  $method
      * @param  array  $rules
      * @param  array  $binds
-     * @param  bool  $override
      *
      * @return $this
      */
-    protected function add(string $method, array $rules, array $binds = [], bool $override = false): self
+    protected function add(string $method, array $rules, array $binds = []): self
     {
-        if ($override) {
-            $this->overrides[] = $method;
-        }
-
         $this->mergeTargetMethodRules($method, $rules);
 
         $binds = array_unique($binds);
 
         foreach ($binds as $bind) {
-            if ($override) {
-                $this->overrides[] = strtoupper($bind);
-            }
             $this->mergeTargetMethodRules($bind, $rules);
         }
 
@@ -264,8 +218,6 @@ class RulesBag implements RulesBagContract
      */
     protected function setTargetMethodRules(string $method, array $rules)
     {
-        $method = strtoupper($method);
-
         $this->rules[$method] = $rules;
     }
 

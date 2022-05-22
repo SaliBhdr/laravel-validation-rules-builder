@@ -4,9 +4,19 @@ namespace SaliBhdr\ValidationRules\Contracts;
 
 interface CachePrefixContract
 {
-    public function __construct(string $type, string $key);
+    /**
+     * @param  string  $type
+     * @param  string  $name
+     */
+    public function __construct(string $type, string $name);
 
+    /**
+     * @return string
+     */
     public function getType(): string;
 
-    public function getKey(): string;
+    /**
+     * @return string
+     */
+    public function getName(): string;
 }

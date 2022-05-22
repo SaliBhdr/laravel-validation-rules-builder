@@ -2,15 +2,30 @@
 
 namespace SaliBhdr\ValidationRules\Contracts;
 
-use Illuminate\Http\Request;
-
 interface RulesManagerContract
 {
-    public function build(Request $request): RulesManagerContract;
+    /**
+     * @return RulesManagerContract
+     */
+    public function build(): RulesManagerContract;
 
-    public function cache(string $key, bool $force): RulesManagerContract;
+    /**
+     * @return CacheContract
+     */
+    public function getCache(): CacheContract;
 
+    /**
+     * @return CacheConfigContract
+     */
+    public function getCacheConfig(): CacheConfigContract;
+
+    /**
+     * @return bool
+     */
     public function isCached(): bool;
 
+    /**
+     * @return array
+     */
     public function rules(): array;
 }

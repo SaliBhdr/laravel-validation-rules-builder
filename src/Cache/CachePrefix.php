@@ -14,12 +14,12 @@ class CachePrefix implements CachePrefixContract
     /**
      * @var string
      */
-    protected $key;
+    protected $name;
 
-    public function __construct(string $type, string $key)
+    public function __construct(string $type, string $name)
     {
         $this->type = $type;
-        $this->key  = $key;
+        $this->name = $name;
     }
 
     /**
@@ -33,8 +33,8 @@ class CachePrefix implements CachePrefixContract
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getName(): string
     {
-        return $this->key;
+        return $this->name;
     }
 }

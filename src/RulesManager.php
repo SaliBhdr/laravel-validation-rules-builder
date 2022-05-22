@@ -4,26 +4,26 @@ namespace SaliBhdr\ValidationRules;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Traits\ForwardsCalls;
-use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
+use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use Illuminate\Contracts\Config\Repository as Config;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
 
 /**
- * @method self any(array $rules, array $binds = [], bool $override = false)
- * @method self get(array $rules, array $binds = [], bool $override = false)
- * @method self head(array $rules, array $binds = [], bool $override = false)
- * @method self post(array $rules, array $binds = [], bool $override = false)
- * @method self put(array $rules, array $binds = [], bool $override = false)
- * @method self delete(array $rules, array $binds = [], bool $override = false)
- * @method self connect(array $rules, array $binds = [], bool $override = false)
- * @method self options(array $rules, array $binds = [], bool $override = false)
- * @method self patch(array $rules, array $binds = [], bool $override = false)
- * @method self purge(array $rules, array $binds = [], bool $override = false)
- * @method self trace(array $rules, array $binds = [], bool $override = false)
- * @method self create(array $rules, array $binds = [], bool $override = false)
- * @method self update(array $rules, array $binds = [], bool $override = false)
+ * @method self any(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self get(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self head(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self post(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self put(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self delete(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self connect(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self options(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self patch(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self purge(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self trace(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self create(array $rules, bool $cacheable = true, array $binds = [])
+ * @method self update(array $rules, bool $cacheable = true, array $binds = [])
  */
 class RulesManager implements RulesManagerContract
 {
@@ -32,7 +32,12 @@ class RulesManager implements RulesManagerContract
     /**
      * @var RulesBagContract
      */
-    protected $rulesBag;
+    protected $cacheableRulesBag;
+
+    /**
+     * @var RulesBagContract
+     */
+    private $unCacheableRulesBag;
 
     /**
      * @var Request
@@ -50,49 +55,30 @@ class RulesManager implements RulesManagerContract
     protected $isCached = false;
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
-     * @var CachePrefixFactory
-     */
-    private $cachePrefixFactory;
-
-    /**
      * @param  Request  $request
-     * @param  RulesBagContract  $rulesBag
+     * @param  RulesBagContract  $cacheableRulesBag
+     * @param  RulesBagContract  $unCacheableRulesBag
      * @param  CacheContract  $cache
-     * @param  Config  $config
-     * @param  CachePrefixFactory  $cachePrefixFactory
      */
     public function __construct(
         Request $request,
-        RulesBagContract $rulesBag,
-        CacheContract $cache,
-        Config $config,
-        CachePrefixFactory $cachePrefixFactory
+        RulesBagContract $cacheableRulesBag,
+        RulesBagContract $unCacheableRulesBag,
+        CacheContract $cache
     ) {
-        $this->request            = $request;
-        $this->rulesBag           = $rulesBag;
-        $this->cache              = $cache;
-        $this->config             = $config;
-        $this->cachePrefixFactory = $cachePrefixFactory;
+        $this->request             = $request;
+        $this->cacheableRulesBag   = $cacheableRulesBag;
+        $this->unCacheableRulesBag = $unCacheableRulesBag;
+        $this->cache               = $cache;
     }
 
     /**
      * returns the instance of rules manager
      *
-     * @param  Request|null  $request
-     *
      * @return RulesManagerContract
      */
-    public function build(Request $request = null): RulesManagerContract
+    public function build(): RulesManagerContract
     {
-        if (!empty($request)) {
-            $this->request = $request;
-        }
-
         return $this;
     }
 
@@ -104,44 +90,43 @@ class RulesManager implements RulesManagerContract
      *
      * @return array
      */
-    public function rules(string $method = null, bool $override = null): array
+    public function rules(string $method = null, bool $override = false): array
     {
-        $method = strtoupper(empty($method) ? $this->request->method() : $method);
+        $method = empty($method) ? $this->request->method() : $method;
 
-        $override = is_null($override) ? $this->rulesBag->isOverride($method) : $override;
+        $unCacheableResult = $this->calculateRules($this->unCacheableRulesBag, $method, $override);
 
-        $result = $this->cache->get($method);
+        $cacheableResult = $this->cache->get($method);
 
-        if (!is_null($result)) {
-            // todo:: some rules can be different based on request find a way to not cache them and merge them after cache retrieve
-            // example : Rules::unique('table')->ignore($this->resource) : resource could be different based on request param
+        if (!is_null($cacheableResult)) {
             $this->isCached = true;
 
-            return $result;
+            return array_merge_recursive($cacheableResult, $unCacheableResult);
         }
 
         $this->isCached = false;
 
-        $this->cache->put($method, $result = $this->calculateRules($method, $override));
+        $this->cache->put($method, $cacheableResult = $this->calculateRules($this->cacheableRulesBag, $method, $override));
 
-        return $result;
+        return array_merge_recursive($cacheableResult, $unCacheableResult);
     }
 
     /**
-     * @param  string|null  $method
-     * @param  bool|null  $override
+     * @param  RulesBagContract  $rulesBag
+     * @param  string  $method
+     * @param  bool  $override
      *
      * @return array
      */
-    protected function calculateRules(string $method = null, bool $override = null): array
+    protected function calculateRules(RulesBagContract $rulesBag, string $method, bool $override): array
     {
-        $anyRules = $this->rulesBag->getRule(Methods::ANY);
+        $anyRules = $rulesBag->getRule(Methods::ANY);
 
         if ($method == Methods::ANY) {
             return $anyRules;
         }
 
-        $methodRules = $this->rulesBag->getRule($method);
+        $methodRules = $rulesBag->getRule($method);
 
         return $this->mergeRules(
             $this->getArrayKeys($anyRules, $methodRules),
@@ -227,23 +212,19 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * enables caching on rules
-     *
-     * @param  string|null  $key
-     * @param  bool  $force
-     *
-     * @return RulesManagerContract
+     * @return CacheContract
      */
-    public function cache(string $key = null, bool $force = false): RulesManagerContract
+    public function getCache(): CacheContract
     {
-        if ($this->config->get('rules.cache.enable', true) || $force) {
-            $this->cache->enable(true)
-                        ->prefix($this->cachePrefixFactory->createPrefix(empty($key) ? $this->request : $key));
-        } else {
-            $this->cache->enable(false);
-        }
+        return $this->cache;
+    }
 
-        return $this;
+    /**
+     * @return CacheConfigContract
+     */
+    public function getCacheConfig(): CacheConfigContract
+    {
+        return $this->cache->getConfig();
     }
 
     /**
@@ -258,12 +239,28 @@ class RulesManager implements RulesManagerContract
 
     /**
      * @param  string  $method
-     * @param  array  $parameters
+     * @param  array  $args
      *
      * @return mixed
      */
-    public function __call(string $method, array $parameters)
+    public function __call(string $method, array $args)
     {
-        return $this->forwardDecoratedCallTo($this->rulesBag, $method, $parameters);
+        if (method_exists($this, $method)) {
+            return $this->{$method}(...$args);
+        } elseif (
+            method_exists($this->cacheableRulesBag, $method)
+            || method_exists($this->unCacheableRulesBag, $method)
+        ) {
+            $cacheable = $args[1] ?? true;
+            unset($args[1]);
+
+            if ($cacheable) {
+                return $this->forwardDecoratedCallTo($this->cacheableRulesBag, $method, $args);
+            } else {
+                return $this->forwardDecoratedCallTo($this->unCacheableRulesBag, $method, $args);
+            }
+        }
+
+        self::throwBadMethodCallException($method);
     }
 }

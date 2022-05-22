@@ -9,21 +9,23 @@ use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
 class CachePrefixFactory
 {
     /**
-     * @param  Request|string  $request
+     * @param  Request|string|int  $request
      *
      * @return CachePrefixContract
      */
     public function createPrefix($request): CachePrefixContract
     {
-        if (is_string($request)) {
-            $payload = $this->getStringPrefix($request);
+        $prefix = null;
+
+        if (is_string($request) || is_numeric($request)) {
+            $prefix = $this->getStringPrefix($request);
         } elseif ($request instanceof FormRequest) {
-            $payload = $this->getFormRequestPrefix($request);
-        } else {
-            $payload = $this->getRoutePrefix($request);
+            $prefix = $this->getFormRequestPrefix($request);
+        } elseif ($request instanceof Request) {
+            $prefix = $this->getRoutePrefix($request);
         }
 
-        return $payload;
+        return $prefix;
     }
 
     /**
@@ -34,12 +36,12 @@ class CachePrefixFactory
     protected function getStringPrefix(string $request): CachePrefix
     {
         if (class_exists($request)) {
-            $payload = new CachePrefix('class', $request);
+            $prefix = new CachePrefix('class', $request);
         } else {
-            $payload = new CachePrefix('custom', $request);
+            $prefix = new CachePrefix('custom', $request);
         }
 
-        return $payload;
+        return $prefix;
     }
 
     /**
@@ -47,7 +49,7 @@ class CachePrefixFactory
      *
      * @return CachePrefix
      */
-    public function getFormRequestPrefix(FormRequest $request): CachePrefix
+    protected function getFormRequestPrefix(FormRequest $request): CachePrefix
     {
         return new CachePrefix('form', get_class($request));
     }
@@ -61,12 +63,14 @@ class CachePrefixFactory
     {
         $route = $request->route();
 
-        if (!empty($route->getName())) {
-            $payload = new CachePrefix('name', $route->getName());
-        } else {
-            $payload = new CachePrefix('uri', $route->uri());
+        if (empty($route)) {
+            return new CachePrefix('request', $request->getUri());
         }
 
-        return $payload;
+        if (!empty($route->getName())) {
+            return new CachePrefix('name', $route->getName());
+        }
+
+        return new CachePrefix('uri', $route->uri());
     }
 }

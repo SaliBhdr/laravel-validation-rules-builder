@@ -2,62 +2,29 @@
 
 namespace SaliBhdr\ValidationRules\Cache;
 
-use Illuminate\Filesystem\Filesystem;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
-use Illuminate\Contracts\Config\Repository as Config;
-use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
+use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
 
 class Cache implements CacheContract
 {
-    /**
-     * @var string
-     */
-    protected $prefix;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
     /**
      * @var array
      */
     protected $rules = [];
 
     /**
-     * @var bool
+     * @var CacheConfigContract
      */
-    protected $isEnabled = false;
-
-    /**
-     * @var self|null
-     */
-    public static $instance = null;
-
-    /**
-     * @var Filesystem
-     */
-    protected $files;
+    protected $config;
 
 
-    private function __construct(Filesystem $files, Config $config)
+    public function __construct(CacheConfigContract $config)
     {
-        $this->files = $files;
+        $this->config = $config;
 
-        $this->setPath($config->get('rules.cache.path'));
-
-        if ($this->files->exists($this->path) && empty($this->rules)) {
-            $this->rules = unserialize($this->files->get($this->path));
+        if (file_exists($this->config->getPath()) && empty($this->rules)) {
+            $this->rules = unserialize(file_get_contents($this->config->getPath()));
         }
-    }
-
-    public static function init(Filesystem $files, Config $config): Cache
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static($files, $config);
-        }
-
-        return static::$instance;
     }
 
     /**
@@ -68,13 +35,13 @@ class Cache implements CacheContract
      */
     public function put(string $method, $value): bool
     {
-        if (!$this->isEnabled()) {
+        if (!$this->config->isEnabled()) {
             return false;
         }
 
         $this->rules[$this->getCacheKey($method)] = $value;
 
-        $this->files->put($this->path, serialize($this->rules));
+        file_put_contents($this->config->getPath(), serialize($this->rules));
 
         return true;
     }
@@ -86,7 +53,7 @@ class Cache implements CacheContract
      */
     public function get(string $method): ?array
     {
-        if (!$this->isEnabled()) {
+        if (!$this->config->isEnabled()) {
             return null;
         }
 
@@ -108,80 +75,38 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  CachePrefixContract  $prefix
-     *
-     * @return CacheContract
-     */
-    public function prefix(CachePrefixContract $prefix): CacheContract
-    {
-        $this->prefix = $prefix->getType() . ':' . $prefix->getKey();
-
-        return $this;
-    }
-
-    /**
-     * @param  bool  $isEnabled
-     *
-     * @return CacheContract
-     */
-    public function enable(bool $isEnabled): CacheContract
-    {
-        $this->isEnabled = $isEnabled;
-
-        return $this;
-    }
-
-    /**
-     * @param  string  $path
-     *
-     * @return CacheContract
-     */
-    public function setPath(string $path): CacheContract
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        return $this->isEnabled;
-    }
-
-    /**
      * @param  string  $method
      *
      * @return string
      */
     protected function getCacheKey(string $method): string
     {
-        return $this->prefix . ':' . $method;
+        return $this->config->getKey()->getType() .
+            ':' . $this->config->getKey()->getName() .
+            ':' . $method;
     }
 
     /**
      * @return array
      */
-    public function getAll(): array
+    public function all(): array
     {
         return $this->rules;
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function flush()
+    public function flush(): bool
     {
-        $this->files->delete($this->getPath());
+        return unlink($this->config->getPath());
+    }
+
+    /**
+     * @return CacheConfigContract
+     */
+    public function getConfig(): CacheConfigContract
+    {
+        return $this->config;
     }
 }

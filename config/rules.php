@@ -12,9 +12,8 @@ return [
     |
     | path : The location of the rules cache file. remember to provide the valid permissions.
     |
-    | enable : This option enables or disables cache. In order to enable caching, you have to call cache()
-    |          method on each RulesBuilder instance . With this option, you can control the
-    |          effect of the cache() method on the entire application.
+    | enable : This option enables or disables cache in the whole application.
+    |          You can also customize the cache config for each rule builder separately.
     */
     'cache' => [
 
