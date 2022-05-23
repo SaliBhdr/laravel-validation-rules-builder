@@ -92,7 +92,7 @@ class RulesManager implements RulesManagerContract
      */
     public function rules(string $method = null, bool $override = false): array
     {
-        $method = empty($method) ? $this->request->method() : $method;
+        $method = empty($method) ? $this->request->method() : strtoupper($method);
 
         $unCacheableResult = $this->calculateRules($this->unCacheableRulesBag, $method, $override);
 
@@ -255,12 +255,33 @@ class RulesManager implements RulesManagerContract
             unset($args[1]);
 
             if ($cacheable) {
-                return $this->forwardDecoratedCallTo($this->cacheableRulesBag, $method, $args);
+                return $this->decoratedForwardCallTo($this->cacheableRulesBag, $method, $args);
             } else {
-                return $this->forwardDecoratedCallTo($this->unCacheableRulesBag, $method, $args);
+                return $this->decoratedForwardCallTo($this->unCacheableRulesBag, $method, $args);
             }
         }
 
         self::throwBadMethodCallException($method);
+    }
+
+    /**
+     * Forward a method call to the given object, returning $this if the forwarded call returned itself.
+     *
+     * @param  mixed  $object
+     * @param  string  $method
+     * @param  array  $args
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    protected function decoratedForwardCallTo($object, string $method, array $args)
+    {
+        $result = $this->forwardCallTo($object, $method, $args);
+
+        if ($result === $object) {
+            return $this;
+        }
+
+        return $result;
     }
 }

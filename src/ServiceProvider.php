@@ -22,7 +22,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->setupConfig();
 
@@ -59,7 +59,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    protected function setupConfig()
+    protected function setupConfig(): void
     {
         $this->publishes([$this->getConfigFile() => config_path('rules.php')], 'rules');
 
@@ -73,7 +73,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function getConfigFile(): string
     {
-        return __DIR__ . '/../config/rules.php';
+        return __DIR__.'/../config/rules.php';
     }
 
     /**
@@ -81,7 +81,7 @@ class ServiceProvider extends BaseServiceProvider
      *
      * @return void
      */
-    protected function setupCommands()
+    protected function setupCommands(): void
     {
         $this->commands([
             RuleClearCommand::class,
