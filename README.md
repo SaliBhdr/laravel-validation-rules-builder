@@ -74,10 +74,10 @@ with a clean syntax.
 ### Code
 
 It's nothing fancy. Whenever you need to validate a request and the
-rules may change in based on request method you can use the `RulesBuilder`.
+rules may change based on request method you can use the `RulesBuilder`.
 
 Let's say you want to make a CRUD for customers. You create a CustomerRequest
-and you want the data for update and create. You have some common validations
+and you want to validate the data for update and create. You have some common validations
 between two methods but each method has specific extra rules. Here is how you can do it:
 
 ```php
@@ -92,7 +92,7 @@ class CustomerRequest extends FormRequest
                ->any([
                    "name"   => "required|string|max:100",
                    "family" => "required|string|max:100",
-                   'role'   => 'required|string|max:255',
+                   'role'   => 'required|string|max:20',
                    "email"  => "required|email",
                    "mobile" => "required|digits:11",
                ])
@@ -132,6 +132,8 @@ Built with ❤ for you.
 
 Contributing
 ----
+Please read the [CONTRIBUTION.md][link-contribution] file before any contributions.
+
 Contributions, useful comments, and feedback are most welcome!
 
 
@@ -154,6 +156,8 @@ Contributions, useful comments, and feedback are most welcome!
 [link-downloads]: https://packagist.org/packages/salibhdr/laravel-validation-rules-builder/stats
 
 [link-packagist]: https://packagist.org/packages/salibhdr/laravel-validation-rules-builder
+
+[link-contribution]: https://github.com/Salibhdr/laravel-validation-rules-builder/blob/master/CONTRIBUTING.md
 
 [link-issues]: https://github.com/Salibhdr/laravel-validation-rules-builder/issues
 
