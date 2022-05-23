@@ -88,7 +88,7 @@ class RuleListCommand extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if (!$this->rules->count()) {
             $this->error("Your application doesn't have any cached rule.");
@@ -171,7 +171,7 @@ class RuleListCommand extends Command
      *
      * @return void
      */
-    protected function displayRules(array $rules)
+    protected function displayRules(array $rules): void
     {
         $rules = collect($rules);
 
@@ -191,16 +191,16 @@ class RuleListCommand extends Command
     {
         if (
             ($this->option('key') && !Str::contains($rule['key'], $this->option('key'))) ||
-            ($this->getMethodOption() && !Str::contains($rule['method'], $this->getMethodOption())) ||
+            ($this->option('method') && !Str::contains($rule['method'], $this->option('method'))) ||
             ($this->option('type') && !Str::contains($rule['type'], $this->option('type')))
         ) {
             return null;
         }
 
-        if ($this->option('prop')) {
+        if ($prop = $this->option('prop')) {
             $keys = implode('|', array_keys($rule['rules']));
 
-            if (!Str::contains($keys, $this->option('prop'))) {
+            if (!Str::contains($keys, $prop)) {
                 return null;
             }
         }
@@ -233,15 +233,7 @@ class RuleListCommand extends Command
         $content = '';
 
         foreach ($rules as $rule) {
-            ['type' => $type, 'key' => $key, 'method' => $method] = $rule;
-
-            $type = sprintf('<fg=yellow>%s</>', "$type");
-
-            $key = sprintf('<fg=#e80e91>%s</>', "$key");
-
-            $method = sprintf('<fg=%s>%s</>', $this->verbColors[$method] ?? 'default', $method);
-
-            $content .= "\ntype: {$type} | key: {$key} | method: {$method}\n";
+            $content .= "\ntype: {$this->colorYellow($rule['type'])} | key: {$this->colorPurple($rule['key'])} | method: {$this->colorMethod($rule['method'])}\n";
 
             $ruleTable = new ConsoleTable();
             $ruleTable->setHeaders(['prop', 'rules']);
@@ -257,6 +249,38 @@ class RuleListCommand extends Command
     }
 
     /**
+     * @param  string  $type
+     *
+     * @return string
+     */
+    protected function colorYellow(string $type): string
+    {
+        return sprintf('<fg=yellow>%s</>', "$type");
+    }
+
+    /**
+     * @param  string  $key
+     *
+     * @return string
+     */
+    protected function colorPurple(string $key): string
+    {
+        return sprintf('<fg=#e80e91>%s</>', "$key");
+    }
+
+    /**
+     * colors method based on verb colors
+     *
+     * @param  string  $method
+     *
+     * @return string
+     */
+    protected function colorMethod(string $method): string
+    {
+        return sprintf('<fg=%s>%s</>', $this->verbColors[$method] ?? 'default', $method);
+    }
+
+    /**
      * @param $keyRule
      *
      * @return string
@@ -265,31 +289,54 @@ class RuleListCommand extends Command
     {
         $content = '';
 
-        if (is_array($keyRule)) {
-            $count = count($keyRule);
+        if (is_string($keyRule)) {
+            return $keyRule;
+        }
 
-            for ($i = 0; $i < $count; $i++) {
-                $rule = $keyRule[$i];
+        $count = count($keyRule);
 
-                if (is_object($rule)) {
-                    if (method_exists($rule, '__toString')) {
-                        $rule = ((string) $rule);
-                    } else {
-                        $rule = get_class($rule);
-                    }
-                }
+        for ($i = 0; $i < $count; $i++) {
+            $rule = $keyRule[$i];
 
-                $content .= $rule;
-
-                if ($i + 1 != $count) {
-                    $content .= '|';
-                }
+            if (is_object($rule)) {
+                $rule = $this->objectToString($rule);
             }
-        } else {
-            $content = $keyRule;
+
+            $content .= $rule;
+
+            if ($this->isNotLastItem($i, $count)) {
+                $content .= '|';
+            }
         }
 
         return $content;
+    }
+
+    /**
+     * @param $rule
+     *
+     * @return string
+     */
+    protected function objectToString($rule): string
+    {
+        if (method_exists($rule, '__toString')) {
+            $rule = ((string) $rule);
+        } else {
+            $rule = get_class($rule);
+        }
+
+        return $rule;
+    }
+
+    /**
+     * @param  int  $i
+     * @param  int  $count
+     *
+     * @return bool
+     */
+    public function isNotLastItem(int $i, int $count): bool
+    {
+        return $i + 1 != $count;
     }
 
     /**
@@ -308,14 +355,5 @@ class RuleListCommand extends Command
             ['reverse', 'r', InputOption::VALUE_NONE, 'Reverse the ordering of the rules'],
             ['sort', null, InputOption::VALUE_OPTIONAL, 'The column (type, key, method) to sort by', 'key'],
         ];
-    }
-
-    protected function getMethodOption(): ?string
-    {
-        if ($method = $this->option('method')) {
-            return $method;
-        }
-
-        return null;
     }
 }

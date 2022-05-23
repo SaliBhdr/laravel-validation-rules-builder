@@ -2,20 +2,22 @@
 
 namespace SaliBhdr\ValidationRules;
 
+use Illuminate\Http\Request;
+
 final class Methods
 {
-    public const ANY = 'any';
+    public const ANY = 'ANY';
     //------ Http Methods ------//
-    public const GET = 'get';
-    public const HEAD = 'head';
-    public const POST = 'post';
-    public const PUT = 'put';
-    public const DELETE = 'delete';
-    public const CONNECT = 'connect';
-    public const OPTIONS = 'options';
-    public const PATCH = 'patch';
-    public const PURGE = 'purge';
-    public const TRACE = 'trace';
+    public const GET = Request::METHOD_GET;
+    public const HEAD = Request::METHOD_HEAD;
+    public const POST = Request::METHOD_POST;
+    public const PUT = Request::METHOD_PUT;
+    public const DELETE = Request::METHOD_DELETE;
+    public const CONNECT = Request::METHOD_CONNECT;
+    public const OPTIONS = Request::METHOD_OPTIONS;
+    public const PATCH = Request::METHOD_PATCH;
+    public const PURGE = Request::METHOD_PURGE;
+    public const TRACE = Request::METHOD_TRACE;
 
     public static function toArray(): array
     {

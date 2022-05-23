@@ -190,7 +190,7 @@ class RulesBag implements RulesBagContract
         $binds = array_unique($binds);
 
         foreach ($binds as $bind) {
-            $this->mergeTargetMethodRules($bind, $rules);
+            $this->mergeTargetMethodRules(strtoupper($bind), $rules);
         }
 
         return $this;
@@ -202,7 +202,7 @@ class RulesBag implements RulesBagContract
      *
      * @return void
      */
-    protected function mergeTargetMethodRules(string $method, array $rules)
+    protected function mergeTargetMethodRules(string $method, array $rules): void
     {
         $this->setTargetMethodRules(
             $method,
@@ -216,7 +216,7 @@ class RulesBag implements RulesBagContract
      *
      * @return void
      */
-    protected function setTargetMethodRules(string $method, array $rules)
+    protected function setTargetMethodRules(string $method, array $rules): void
     {
         $this->rules[$method] = $rules;
     }
