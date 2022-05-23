@@ -8,7 +8,6 @@ use SaliBhdr\ValidationRules\Facades\RulesBuilder;
 
 class RulesBuilderTest extends TestCase
 {
-
     public function testItBuildsRulesOfCreateOnPostRequest()
     {
         $this->app->make('request')->setMethod(Methods::POST);

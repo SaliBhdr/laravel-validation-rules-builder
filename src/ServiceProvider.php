@@ -73,7 +73,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function getConfigFile(): string
     {
-        return __DIR__.'/../config/rules.php';
+        return __DIR__ . '/../config/rules.php';
     }
 
     /**
