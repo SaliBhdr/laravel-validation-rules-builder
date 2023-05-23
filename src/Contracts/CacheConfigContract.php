@@ -10,7 +10,7 @@ interface CacheConfigContract
     public function getPath(): string;
 
     /**
-     * @param  bool  $isEnabled
+     * @param bool $isEnabled
      *
      * @return CacheConfigContract
      */
@@ -22,7 +22,7 @@ interface CacheConfigContract
     public function isEnabled(): bool;
 
     /**
-     * @param  \Illuminate\Http\Request|string|int  $request
+     * @param \Illuminate\Http\Request|string|int $request
      *
      * @return CacheConfigContract
      */

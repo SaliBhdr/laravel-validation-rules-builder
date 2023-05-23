@@ -2,25 +2,23 @@
 
 namespace SaliBhdr\ValidationRules;
 
-use SaliBhdr\ValidationRules\Cache\Cache;
-use Illuminate\Contracts\Foundation\Application;
-use SaliBhdr\ValidationRules\Cache\CacheConfig;
 use Illuminate\Contracts\Config\Repository as Config;
-use SaliBhdr\ValidationRules\Contracts\CacheContract;
-use SaliBhdr\ValidationRules\Commands\RuleListCommand;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use SaliBhdr\ValidationRules\Cache\Cache;
+use SaliBhdr\ValidationRules\Cache\CacheConfig;
 use SaliBhdr\ValidationRules\Cache\CachePrefixFactory;
 use SaliBhdr\ValidationRules\Commands\RuleClearCommand;
-use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
+use SaliBhdr\ValidationRules\Commands\RuleListCommand;
 use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
+use SaliBhdr\ValidationRules\Contracts\CacheContract;
+use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
-use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -56,8 +54,6 @@ class ServiceProvider extends BaseServiceProvider
 
     /**
      * Setup the config.
-     *
-     * @return void
      */
     protected function setupConfig(): void
     {
@@ -73,13 +69,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function getConfigFile(): string
     {
-        return __DIR__.'/../config/rules.php';
+        return __DIR__ . '/../config/rules.php';
     }
 
     /**
      * add commands.
-     *
-     * @return void
      */
     protected function setupCommands(): void
     {

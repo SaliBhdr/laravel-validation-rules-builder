@@ -12,7 +12,7 @@ class RulesBag implements RulesBagContract
     protected $rules = [];
 
     /**
-     * @param  string  $name
+     * @param string $name
      *
      * @return array
      */
@@ -30,8 +30,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -41,8 +41,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -54,8 +54,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -65,8 +65,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -78,8 +78,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -89,8 +89,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -100,8 +100,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -111,8 +111,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -122,8 +122,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -133,8 +133,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -144,8 +144,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -155,8 +155,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -166,8 +166,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param array $rules
+     * @param array $binds
      *
      * @return $this
      */
@@ -177,9 +177,9 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  string  $method
-     * @param  array  $rules
-     * @param  array  $binds
+     * @param string $method
+     * @param array  $rules
+     * @param array  $binds
      *
      * @return $this
      */
@@ -197,10 +197,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  string  $method
-     * @param  array  $rules
-     *
-     * @return void
+     * @param string $method
+     * @param array  $rules
      */
     protected function mergeTargetMethodRules(string $method, array $rules): void
     {
@@ -211,10 +209,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  string  $method
-     * @param  array  $rules
-     *
-     * @return void
+     * @param string $method
+     * @param array  $rules
      */
     protected function setTargetMethodRules(string $method, array $rules): void
     {
@@ -222,8 +218,8 @@ class RulesBag implements RulesBagContract
     }
 
     /**
-     * @param  array  $firstRules
-     * @param  array  $secondRules
+     * @param array $firstRules
+     * @param array $secondRules
      *
      * @return array
      */

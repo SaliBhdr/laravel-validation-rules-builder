@@ -2,8 +2,8 @@
 
 namespace SaliBhdr\ValidationRules\Cache;
 
-use Illuminate\Http\Request;
 use Illuminate\Config\Repository as Config;
+use Illuminate\Http\Request;
 use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
 use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
 
@@ -46,7 +46,7 @@ class CacheConfig implements CacheConfigContract
     }
 
     /**
-     * @param  bool  $isEnabled
+     * @param bool $isEnabled
      *
      * @return CacheConfigContract
      */
@@ -66,7 +66,7 @@ class CacheConfig implements CacheConfigContract
     }
 
     /**
-     * @param  \Illuminate\Http\Request|string|int  $prefix
+     * @param \Illuminate\Http\Request|string|int $prefix
      *
      * @return CacheConfigContract
      */

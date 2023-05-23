@@ -5,7 +5,7 @@ namespace SaliBhdr\ValidationRules\Contracts;
 interface CacheContract
 {
     /**
-     * @param  string  $method
+     * @param string $method
      * @param $value
      *
      * @return bool
@@ -13,14 +13,14 @@ interface CacheContract
     public function put(string $method, $value): bool;
 
     /**
-     * @param  string  $method
+     * @param string $method
      *
      * @return array|null
      */
     public function get(string $method): ?array;
 
     /**
-     * @param  string  $method
+     * @param string $method
      *
      * @return bool
      */

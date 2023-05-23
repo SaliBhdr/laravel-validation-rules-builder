@@ -2,14 +2,14 @@
 
 namespace SaliBhdr\ValidationRules\Commands;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use LucidFrame\Console\ConsoleTable;
+use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Methods;
 use Symfony\Component\Console\Input\InputOption;
-use SaliBhdr\ValidationRules\Contracts\CacheContract;
 
 class RuleListCommand extends Command
 {
@@ -72,7 +72,7 @@ class RuleListCommand extends Command
     /**
      * Create a new rule command instance.
      *
-     * @param  CacheContract  $cache
+     * @param CacheContract $cache
      */
     public function __construct(CacheContract $cache)
     {
@@ -85,8 +85,6 @@ class RuleListCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -107,8 +105,6 @@ class RuleListCommand extends Command
 
     /**
      * Compile the rules into a displayable format.
-     *
-     * @return array
      */
     protected function getRules(): ?array
     {
@@ -132,8 +128,8 @@ class RuleListCommand extends Command
     /**
      * Get the rule information for a given rule.
      *
-     * @param  array  $rule
-     * @param  string  $key
+     * @param array  $rule
+     * @param string $key
      *
      * @return array|null
      */
@@ -152,8 +148,8 @@ class RuleListCommand extends Command
     /**
      * Sort the rules by a given element.
      *
-     * @param  string  $sort
-     * @param  array  $rules
+     * @param string $sort
+     * @param array  $rules
      *
      * @return array|null
      */
@@ -167,9 +163,7 @@ class RuleListCommand extends Command
     /**
      * Display the rule information on the console.
      *
-     * @param  array  $rules
-     *
-     * @return void
+     * @param array $rules
      */
     protected function displayRules(array $rules): void
     {
@@ -183,7 +177,7 @@ class RuleListCommand extends Command
     /**
      * Filter the rule by URI and / or name.
      *
-     * @param  array  $rule
+     * @param array $rule
      *
      * @return array|null
      */
@@ -211,7 +205,7 @@ class RuleListCommand extends Command
     /**
      * Convert the given rules to JSON.
      *
-     * @param  Collection  $rules
+     * @param Collection $rules
      *
      * @return string
      */
@@ -224,7 +218,7 @@ class RuleListCommand extends Command
     /**
      * Convert the given rules to regular CLI output.
      *
-     * @param  Collection  $rules
+     * @param Collection $rules
      *
      * @return string
      */
@@ -249,7 +243,7 @@ class RuleListCommand extends Command
     }
 
     /**
-     * @param  string  $type
+     * @param string $type
      *
      * @return string
      */
@@ -259,7 +253,7 @@ class RuleListCommand extends Command
     }
 
     /**
-     * @param  string  $key
+     * @param string $key
      *
      * @return string
      */
@@ -271,7 +265,7 @@ class RuleListCommand extends Command
     /**
      * colors method based on verb colors
      *
-     * @param  string  $method
+     * @param string $method
      *
      * @return string
      */
@@ -329,8 +323,8 @@ class RuleListCommand extends Command
     }
 
     /**
-     * @param  int  $i
-     * @param  int  $count
+     * @param int $i
+     * @param int $count
      *
      * @return bool
      */

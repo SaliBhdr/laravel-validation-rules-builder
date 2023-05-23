@@ -2,8 +2,8 @@
 
 namespace SaliBhdr\ValidationRules\Cache;
 
-use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
+use SaliBhdr\ValidationRules\Contracts\CacheContract;
 
 class Cache implements CacheContract
 {
@@ -17,7 +17,6 @@ class Cache implements CacheContract
      */
     protected $config;
 
-
     public function __construct(CacheConfigContract $config)
     {
         $this->config = $config;
@@ -28,7 +27,7 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  string  $method
+     * @param string $method
      * @param $value
      *
      * @return bool
@@ -47,7 +46,7 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  string  $method
+     * @param string $method
      *
      * @return mixed|null
      */
@@ -65,7 +64,7 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  string  $method
+     * @param string $method
      *
      * @return mixed|null
      */
@@ -75,7 +74,7 @@ class Cache implements CacheContract
     }
 
     /**
-     * @param  string  $method
+     * @param string $method
      *
      * @return string
      */

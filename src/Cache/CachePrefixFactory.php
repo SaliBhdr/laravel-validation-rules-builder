@@ -2,14 +2,14 @@
 
 namespace SaliBhdr\ValidationRules\Cache;
 
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use SaliBhdr\ValidationRules\Contracts\CachePrefixContract;
 
 class CachePrefixFactory
 {
     /**
-     * @param  Request|string|int  $request
+     * @param Request|string|int $request
      *
      * @return CachePrefixContract
      */
@@ -29,7 +29,7 @@ class CachePrefixFactory
     }
 
     /**
-     * @param  string  $request
+     * @param string $request
      *
      * @return CachePrefix
      */
@@ -45,7 +45,7 @@ class CachePrefixFactory
     }
 
     /**
-     * @param  FormRequest  $request
+     * @param FormRequest $request
      *
      * @return CachePrefix
      */
@@ -55,7 +55,7 @@ class CachePrefixFactory
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return CachePrefix
      */

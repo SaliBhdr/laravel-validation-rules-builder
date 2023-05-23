@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Traits\ForwardsCalls;
 use SaliBhdr\ValidationRules\Contracts\CacheConfigContract;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
-use Illuminate\Contracts\Config\Repository as Config;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
 
@@ -55,10 +54,10 @@ class RulesManager implements RulesManagerContract
     protected $isCached = false;
 
     /**
-     * @param  Request  $request
-     * @param  RulesBagContract  $cacheableRulesBag
-     * @param  RulesBagContract  $unCacheableRulesBag
-     * @param  CacheContract  $cache
+     * @param Request          $request
+     * @param RulesBagContract $cacheableRulesBag
+     * @param RulesBagContract $unCacheableRulesBag
+     * @param CacheContract    $cache
      */
     public function __construct(
         Request $request,
@@ -85,8 +84,8 @@ class RulesManager implements RulesManagerContract
     /**
      * returns the resolved rules
      *
-     * @param  string|null  $method
-     * @param  bool|null  $override
+     * @param string|null $method
+     * @param bool|null   $override
      *
      * @return array
      */
@@ -112,9 +111,9 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  RulesBagContract  $rulesBag
-     * @param  string  $method
-     * @param  bool  $override
+     * @param RulesBagContract $rulesBag
+     * @param string           $method
+     * @param bool             $override
      *
      * @return array
      */
@@ -157,6 +156,7 @@ class RulesManager implements RulesManagerContract
                 if (!empty($rulesOfKeyForSecondRules)) {
                     $result[$key] = $rulesOfKeyForSecondRules;
                 }
+
                 continue;
             }
 
@@ -167,8 +167,8 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  array  $rules
-     * @param  string  $key
+     * @param array  $rules
+     * @param string $key
      *
      * @return array
      */
@@ -182,7 +182,7 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  string|array  $rules
+     * @param string|array $rules
      *
      * @return array
      */
@@ -196,7 +196,7 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  array  ...$arrays
+     * @param array ...$arrays
      *
      * @return array
      */
@@ -238,8 +238,8 @@ class RulesManager implements RulesManagerContract
     }
 
     /**
-     * @param  string  $method
-     * @param  array  $args
+     * @param string $method
+     * @param array  $args
      *
      * @return mixed
      */
@@ -267,9 +267,10 @@ class RulesManager implements RulesManagerContract
     /**
      * Forward a method call to the given object, returning $this if the forwarded call returned itself.
      *
-     * @param  mixed  $object
-     * @param  string  $method
-     * @param  array  $args
+     * @param mixed  $object
+     * @param string $method
+     * @param array  $args
+     *
      * @return mixed
      *
      * @throws \BadMethodCallException

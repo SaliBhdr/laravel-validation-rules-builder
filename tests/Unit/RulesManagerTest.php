@@ -2,41 +2,38 @@
 
 namespace SaliBhdr\ValidationRules\Tests\Unit;
 
-use Mockery;
-use Mockery\MockInterface;
 use Illuminate\Http\Request;
+use Mockery;
 use Mockery\LegacyMockInterface;
-use SaliBhdr\ValidationRules\RulesManager;
-use SaliBhdr\ValidationRules\Tests\TestCase;
+use Mockery\MockInterface;
 use SaliBhdr\ValidationRules\Contracts\CacheContract;
 use SaliBhdr\ValidationRules\Contracts\RulesBagContract;
 use SaliBhdr\ValidationRules\Contracts\RulesManagerContract;
+use SaliBhdr\ValidationRules\RulesManager;
+use SaliBhdr\ValidationRules\Tests\TestCase;
 
 class RulesManagerTest extends TestCase
 {
     /**
-     * @var LegacyMockInterface|MockInterface|Request|null $requestMock
+     * @var LegacyMockInterface|MockInterface|Request|null
      */
     protected $requestMock;
 
     /**
-     * @var LegacyMockInterface|MockInterface|RulesBagContract|null $cacheableRulesBagMock
+     * @var LegacyMockInterface|MockInterface|RulesBagContract|null
      */
     protected $cacheableRulesBagMock;
 
     /**
-     * @var LegacyMockInterface|MockInterface|RulesBagContract|null $unCacheableRulesBagMock
+     * @var LegacyMockInterface|MockInterface|RulesBagContract|null
      */
     protected $unCacheableRulesBagMock;
 
     /**
-     * @var LegacyMockInterface|MockInterface|CacheContract|null $cacheMock
+     * @var LegacyMockInterface|MockInterface|CacheContract|null
      */
     protected $cacheMock;
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
         parent::setUp();

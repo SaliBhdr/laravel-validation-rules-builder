@@ -40,7 +40,7 @@ class RuleClearCommand extends Command
     /**
      * Create a new route clear command instance.
      *
-     * @param  CacheContract  $cache
+     * @param CacheContract $cache
      */
     public function __construct(CacheContract $cache)
     {
@@ -51,8 +51,6 @@ class RuleClearCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function handle(): void
     {

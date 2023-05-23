@@ -3,13 +3,13 @@
 namespace SaliBhdr\ValidationRules\Tests;
 
 use Illuminate\Foundation\Application;
-use SaliBhdr\ValidationRules\ServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use SaliBhdr\ValidationRules\ServiceProvider;
 
 class TestCase extends BaseTestCase
 {
     /**
-     * @param  Application  $app
+     * @param Application $app
      *
      * @return array
      */
